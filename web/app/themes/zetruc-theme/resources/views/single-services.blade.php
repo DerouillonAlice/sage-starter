@@ -1,32 +1,60 @@
-{{-- filepath: /home/alice/starter-theme/starter-theme/web/app/themes/zetruc-theme/resources/views/single-services.blade.php --}}
 @extends('layouts.app')
 
 @section('content')
-<section class="py-16 bg-gray-100">
+{{-- Hero Section --}}
+<section class="py-20 bg-gray-900 text-white">
   <div class="container mx-auto px-6 max-w-7xl">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-      @if (has_post_thumbnail())
-        <div class="flex justify-center">
-          <img src="{{ get_the_post_thumbnail_url() }}" alt="{{ get_the_title() }}" class="rounded-3xl shadow-2xl max-w-full h-auto">
+    <div class="text-center">
+      <h1 class="text-4xl md:text-6xl font-bold mb-6">{{ get_the_title() }}</h1>
+      @if (get_field('services_desc'))
+        <div class="text-xl leading-relaxed max-w-3xl mx-auto">
+          {!! get_field('services_desc') !!}
+        </div>
+      @endif
+    </div>
+  </div>
+</section>
+
+{{-- Contenu principal --}}
+<section class="py-16 bg-white">
+  <div class="container mx-auto px-6 max-w-4xl">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
+      
+      {{-- Image du service --}}
+      @if (get_field('services_icon'))
+        <div class="lg:col-span-1">
+          <div class="bg-gray-50 rounded-2xl p-8 text-center">
+            <img src="{{ get_field('services_icon') }}" alt="{{ get_the_title() }}" class="w-24 h-24 mx-auto mb-4 object-contain">
+            <h3 class="text-lg font-semibold text-gray-800">{{ get_the_title() }}</h3>
+          </div>
         </div>
       @endif
 
-      <div>
-        <h1 class="text-5xl font-extrabold mb-6 leading-tight">{{ get_the_title() }}</h1>
-
-        @if ($desc = get_field('services_desc'))
-          <p class="text-lg leading-relaxed mb-6">{!! $desc !!}</p>
+      {{-- Contenu détaillé --}}
+      <div class="lg:col-span-2">
+        @if (has_post_thumbnail())
+          <img src="{{ get_the_post_thumbnail_url('large') }}" alt="{{ get_the_title() }}" class="w-full rounded-xl mb-8 shadow-lg">
         @endif
 
-        @if ($link = get_field('services_link'))
-          @if ($label = get_field('services_link_text'))
-            <a href="{{ $link }}" class="inline-block px-6 py-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition">
-              {{ $label }}
+        <div class="prose prose-lg max-w-none">
+          @php(the_content())
+        </div>
+
+        {{-- Bouton d'action --}}
+        @if (get_field('services_link') && get_field('services_link_text'))
+          <div class="mt-8">
+            <a href="{{ get_field('services_link') }}" class="inline-flex items-center px-8 py-4 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 shadow-lg">
+              <span class="mr-2">{{ get_field('services_link_text') }}</span>
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+              </svg>
             </a>
-          @endif
+          </div>
         @endif
       </div>
     </div>
   </div>
 </section>
+
+
 @endsection
